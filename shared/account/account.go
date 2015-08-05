@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"strings"
+	"sync"
 )
 
 type Account struct {
@@ -40,6 +41,19 @@ func (a *Account) AddSecret(s string) {
 	}
 
 	a.Secret = parts[1]
+}
+
+func EachAccountAsync(accts []*Account, cb func(*Account)) {
+	var waiter sync.WaitGroup
+	for _, a := range accts {
+		waiter.Add(1)
+		go func(a *Account) {
+			defer waiter.Done()
+			cb(a)
+		}(a)
+
+	}
+	waiter.Wait()
 }
 
 func ParseAccounts(f *string) (accts []*Account) {
