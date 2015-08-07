@@ -32,6 +32,15 @@ func DaysAgo(i int, from *time.Time) *time.Time {
 	return &ret
 }
 
+func AppendStringIfMissing(slice []string, s string) []string {
+	for _, ele := range slice {
+		if ele == s {
+			return slice
+		}
+	}
+	return append(slice, s)
+}
+
 var locker sync.Mutex
 
 type Output struct {
