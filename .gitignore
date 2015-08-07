@@ -1,3 +1,6 @@
 creds*
 *.csv
-multi-account-list-swf-activity-types
+*.out
+*.txt
+/multi-account-list-swf-activity-types/multi-account-list-swf-activity-types
+/multi-account-list-swf-workflows/multi-account-list-swf-workflows

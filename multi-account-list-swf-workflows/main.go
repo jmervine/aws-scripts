@@ -17,7 +17,7 @@ var printer *utils.Output
 
 // CONFIGURATION
 // - Changable via flags:
-var output = aws.String("ActivityTypeNames.csv")
+var output = aws.String("WorkflowTypeNames.csv")
 var creds = aws.String("../creds.txt")
 var region = aws.String("us-east-1")
 var nameOnly *bool
@@ -28,7 +28,7 @@ func main() {
 	creds = flag.String("c", *creds, "creds file")
 	region = flag.String("r", *region, "region")
 	output = flag.String("o", *output, "tee result to, defaults to <metric>.csv")
-	nameOnly = flag.Bool("u", false, "print only names")
+	nameOnly = flag.Bool("N", false, "print only names")
 	flag.Parse()
 
 	printer = utils.NewOutput(*output, true)
@@ -78,7 +78,7 @@ func main() {
 			return
 		}
 
-		act, err := sw.ListActivityTypes(&swf.ListActivityTypesInput{
+		act, err := sw.ListWorkflowTypes(&swf.ListWorkflowTypesInput{
 			Domain:             getDomain(),
 			RegistrationStatus: aws.String(swf.RegistrationStatusRegistered),
 		})
@@ -94,7 +94,7 @@ func main() {
 		if *nameOnly {
 			var lines []string
 			for _, t := range act.TypeInfos {
-				lines = utils.AppendStringIfMissing(lines, *t.ActivityType.Name)
+				lines = utils.AppendStringIfMissing(lines, *t.WorkflowType.Name)
 			}
 
 			for _, l := range lines {
@@ -102,7 +102,7 @@ func main() {
 			}
 		} else {
 			for _, t := range act.TypeInfos {
-				printer.Puts(fmt.Sprintf("%s,%s,%s\n", a.Name, *domain, *t.ActivityType.Name))
+				printer.Puts(fmt.Sprintf("%s,%s,%s\n", a.Name, *domain, *t.WorkflowType.Name))
 			}
 		}
 
