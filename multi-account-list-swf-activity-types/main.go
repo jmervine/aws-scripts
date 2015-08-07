@@ -28,7 +28,7 @@ func main() {
 	creds = flag.String("c", *creds, "creds file")
 	region = flag.String("r", *region, "region")
 	output = flag.String("o", *output, "tee result to, defaults to <metric>.csv")
-	nameOnly = flag.Bool("u", false, "print only names")
+	nameOnly = flag.Bool("N", false, "print only names")
 	flag.Parse()
 
 	printer = utils.NewOutput(*output, true)
