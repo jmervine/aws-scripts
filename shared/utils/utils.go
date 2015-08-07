@@ -35,18 +35,18 @@ func DaysAgo(i int, from *time.Time) *time.Time {
 var locker sync.Mutex
 
 type Output struct {
-	file *os.File
-	lock bool // support simple locking for thread safty
+	File *os.File
+	Lock bool // support simple locking for thread safty
 }
 
 func NewOutput(p string, l bool) *Output {
-	o := &Output{lock: l}
+	o := &Output{Lock: l}
 
 	f, e := os.OpenFile(p, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0666)
 	if e != nil {
 		panic(e)
 	}
-	o.file = f
+	o.File = f
 
 	return o
 }
@@ -56,22 +56,22 @@ func NewOutput(p string, l bool) *Output {
 // output := new(Output)
 
 func (o *Output) Puts(s string) {
-	if o.lock {
+	if o.Lock {
 		locker.Lock()
 	}
 
-	if o.file != nil {
-		if _, e := o.file.WriteString(s); e != nil {
+	if o.File != nil {
+		if _, e := o.File.WriteString(s); e != nil {
 			panic(e)
 		}
-		if e := o.file.Sync(); e != nil {
+		if e := o.File.Sync(); e != nil {
 			panic(e)
 		}
 	}
 
 	fmt.Printf(s)
 
-	if o.lock {
+	if o.Lock {
 		locker.Unlock()
 	}
 }
